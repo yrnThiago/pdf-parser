@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "github.com/yrnThiago/pdf-ocr";
+
+service PdfService {
+  rpc AddPdf(AddPdfRequest) returns(AddPdfResponse) {}
+}
+
+message Pdf {
+  string ID = 1;
+  string Path = 2;
+}
+
+message AddPdfRequest {
+  string Path = 1;
+}
+
+message AddPdfResponse {
+  string Text = 1;
+}
