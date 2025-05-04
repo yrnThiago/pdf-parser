@@ -2,15 +2,16 @@ package main
 
 import (
 	"github.com/yrnThiago/pdf-ocr/config"
-	"github.com/yrnThiago/pdf-ocr/internal/server"
+	grpcServer "github.com/yrnThiago/pdf-ocr/internal/grpc/server"
+	httpServer "github.com/yrnThiago/pdf-ocr/internal/http/server"
 )
 
 func main() {
 	config.Init()
 
-	httpServer := server.NewHttpServer(":3000")
+	httpServer := httpServer.NewHttpServer(":3000")
 	go httpServer.Run()
 
-	grpcServer := server.NewGRPCServer(":50051")
+	grpcServer := grpcServer.NewGRPCServer(":50051")
 	grpcServer.Run()
 }

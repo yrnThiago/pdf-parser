@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/yrnThiago/pdf-ocr/config"
-	"github.com/yrnThiago/pdf-ocr/internal/services/genproto"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/services/genproto"
 )
 
 type GrpcClient struct {

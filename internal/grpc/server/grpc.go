@@ -5,8 +5,8 @@ import (
 	"net"
 
 	"github.com/yrnThiago/pdf-ocr/config"
-	handler "github.com/yrnThiago/pdf-ocr/internal/handler/pdf"
-	"github.com/yrnThiago/pdf-ocr/internal/usecase"
+	handler "github.com/yrnThiago/pdf-ocr/internal/grpc/handler/pdf"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/services"
 	"google.golang.org/grpc"
 )
 
@@ -27,7 +27,7 @@ func (s *gRPCServer) Run() error {
 
 	grpcServer := grpc.NewServer()
 
-	pdfService := usecase.NewPdfUseCase()
+	pdfService := services.NewPdfUseCase()
 	handler.NewPdfService(grpcServer, pdfService)
 
 	log.Printf("listening port on %s", s.port)

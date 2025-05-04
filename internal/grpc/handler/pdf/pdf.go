@@ -5,8 +5,8 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/yrnThiago/pdf-ocr/internal/services/genproto"
-	"github.com/yrnThiago/pdf-ocr/internal/services/types"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/services/genproto"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/services/types"
 )
 
 type PdfHandler struct {

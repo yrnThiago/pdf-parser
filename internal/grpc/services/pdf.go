@@ -1,4 +1,4 @@
-package usecase
+package services
 
 import (
 	"bytes"
@@ -6,8 +6,8 @@ import (
 
 	"github.com/ledongthuc/pdf"
 
-	"github.com/yrnThiago/pdf-ocr/internal/client"
-	pdf_ocr "github.com/yrnThiago/pdf-ocr/internal/services/genproto"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/client"
+	pdf_ocr "github.com/yrnThiago/pdf-ocr/internal/grpc/services/genproto"
 )
 
 type PdfUseCase struct {

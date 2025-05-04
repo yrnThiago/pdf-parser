@@ -5,7 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"github.com/yrnThiago/pdf-ocr/internal/client"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/client"
 )
 
 type HttpServer struct {
