@@ -2,10 +2,12 @@ package client
 
 import (
 	"context"
+	"fmt"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
+	"github.com/yrnThiago/pdf-ocr/config"
 	"github.com/yrnThiago/pdf-ocr/internal/services/genproto"
 )
 
@@ -15,7 +17,7 @@ type GrpcClient struct {
 
 func NewGrpcClient() *GrpcClient {
 	conn, err := grpc.NewClient(
-		"localhost:50051",
+		getGrpcUrl(),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
@@ -36,4 +38,8 @@ func (c *GrpcClient) AddPdf(filePath string) (string, error) {
 	}
 
 	return pdfResponse.Text, nil
+}
+
+func getGrpcUrl() string {
+	return fmt.Sprintf("%s:%s", config.Env.GrpcHost, config.Env.GrpcPort)
 }

@@ -6,13 +6,18 @@ import (
 
 	"github.com/ledongthuc/pdf"
 
+	"github.com/yrnThiago/pdf-ocr/internal/client"
 	pdf_ocr "github.com/yrnThiago/pdf-ocr/internal/services/genproto"
 )
 
-type PdfUseCase struct{}
+type PdfUseCase struct {
+	GrpcClient *client.GrpcClient
+}
 
 func NewPdfUseCase() *PdfUseCase {
-	return &PdfUseCase{}
+	return &PdfUseCase{
+		GrpcClient: client.NewGrpcClient(),
+	}
 }
 
 func (p *PdfUseCase) AddPdf(ctx context.Context, req *pdf_ocr.Pdf) (string, error) {

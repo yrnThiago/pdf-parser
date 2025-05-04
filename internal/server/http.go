@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/yrnThiago/pdf-ocr/internal/client"
 )
 
@@ -25,7 +26,8 @@ func (h *HttpServer) Run() error {
 			return c.Status(500).JSON(fiber.Map{"error": "something went wrong"})
 		}
 
-		filePath := "internal/uploads/" + file.Filename
+		fileID := uuid.New().String()
+		filePath := "internal/uploads/" + fileID + ".pdf"
 		c.SaveFile(file, filePath)
 
 		client := client.NewGrpcClient()
@@ -38,6 +40,5 @@ func (h *HttpServer) Run() error {
 	})
 
 	log.Printf("Starting server on %s", h.addr)
-
 	return app.Listen(h.addr)
 }
