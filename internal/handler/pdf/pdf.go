@@ -30,13 +30,13 @@ func (h *PdfHandler) AddPdf(
 		Path: req.Path,
 	}
 
-	err := h.pdfService.AddPdf(ctx, pdf)
+	content, err := h.pdfService.AddPdf(ctx, pdf)
 	if err != nil {
 		return nil, err
 	}
 
 	res := &pdf_ocr.AddPdfResponse{
-		Text: "success",
+		Text: content,
 	}
 
 	return res, nil

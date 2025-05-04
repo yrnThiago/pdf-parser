@@ -29,9 +29,12 @@ func (h *HttpServer) Run() error {
 		c.SaveFile(file, filePath)
 
 		client := client.NewGrpcClient()
-		client.AddPdf(filePath)
+		content, err := client.AddPdf(filePath)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "something went wrong"})
+		}
 
-		return c.Status(200).JSON(fiber.Map{"message": "success"})
+		return c.Status(200).JSON(fiber.Map{"message": content})
 	})
 
 	log.Printf("Starting server on %s", h.addr)

@@ -27,11 +27,13 @@ func NewGrpcClient() *GrpcClient {
 	}
 }
 
-func (c *GrpcClient) AddPdf(filePath string) {
-	_, err := c.PdfServiceClient.AddPdf(context.Background(), &pdf_ocr.AddPdfRequest{
+func (c *GrpcClient) AddPdf(filePath string) (string, error) {
+	pdfResponse, err := c.PdfServiceClient.AddPdf(context.Background(), &pdf_ocr.AddPdfRequest{
 		Path: filePath,
 	})
 	if err != nil {
 		panic(err)
 	}
+
+	return pdfResponse.Text, nil
 }

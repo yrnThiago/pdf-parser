@@ -3,7 +3,6 @@ package usecase
 import (
 	"bytes"
 	"context"
-	"fmt"
 
 	"github.com/ledongthuc/pdf"
 
@@ -16,20 +15,17 @@ func NewPdfUseCase() *PdfUseCase {
 	return &PdfUseCase{}
 }
 
-func (p *PdfUseCase) AddPdf(ctx context.Context, req *pdf_ocr.Pdf) error {
-	getContentFromPdf(req.Path)
-
-	return nil
+func (p *PdfUseCase) AddPdf(ctx context.Context, req *pdf_ocr.Pdf) (string, error) {
+	return getContentFromPdf(req.Path)
 }
 
-func getContentFromPdf(path string) error {
+func getContentFromPdf(path string) (string, error) {
 	pdf.DebugOn = true
 	content, err := readPdf(path) // Read local pdf file
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(content)
-	return nil
+	return content, nil
 }
 
 func readPdf(path string) (string, error) {
