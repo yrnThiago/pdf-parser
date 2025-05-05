@@ -5,9 +5,11 @@ import (
 	"context"
 
 	"github.com/ledongthuc/pdf"
+	"go.uber.org/zap"
 
-	"github.com/yrnThiago/pdf-ocr/internal/grpc/client"
 	"github.com/yrnThiago/pdf-ocr/api/pb"
+	"github.com/yrnThiago/pdf-ocr/config"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/client"
 	"github.com/yrnThiago/pdf-ocr/internal/utils"
 )
 
@@ -29,7 +31,10 @@ func (p *PdfUseCase) ExtractFromPdf(ctx context.Context, req *pdf_ocr.Pdf) (stri
 func getContentFromPdf(path string) (string, error) {
 	content, err := readPdf(path)
 	if err != nil {
-		panic(err)
+		config.Logger.Fatal(
+			"file not found",
+			zap.String("path", path),
+		)
 	}
 
 	return content, nil

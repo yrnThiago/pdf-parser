@@ -2,10 +2,11 @@ package server
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/zap"
+
 	"github.com/yrnThiago/pdf-ocr/config"
 	"github.com/yrnThiago/pdf-ocr/internal/infra/nats"
 	"github.com/yrnThiago/pdf-ocr/internal/utils"
-	"go.uber.org/zap"
 )
 
 type HttpServer struct {
@@ -21,7 +22,6 @@ func Init() {
 	app := fiber.New()
 
 	app.Post("/upload", func(c *fiber.Ctx) error {
-
 		file, err := c.FormFile("pdf")
 		if err != nil {
 			return c.Status(500).JSON(fiber.Map{"error": "something went wrong"})
@@ -32,11 +32,18 @@ func Init() {
 		c.SaveFile(file, filePath)
 
 		go nats.PdfPublisher.Publish(fileID)
+		config.Logger.Info(
+			"file successfully uploaded",
+			zap.String("path", filePath),
+		)
 
 		return c.Status(200).JSON(fiber.Map{"message": "wait until we proceess your file"})
 	})
 
-	config.Logger.Info("http server listening on", zap.String("port", server.port))
+	config.Logger.Info(
+		"http server listening on",
+		zap.String("port", server.port),
+	)
 
 	config.Logger.Fatal(
 		"something went wrong",
