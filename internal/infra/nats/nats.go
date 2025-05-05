@@ -3,27 +3,28 @@ package nats
 import (
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
+	"go.uber.org/zap"
+
 	"github.com/yrnThiago/pdf-ocr/config"
 	"github.com/yrnThiago/pdf-ocr/internal/utils"
-	"go.uber.org/zap"
 )
 
 var (
-	NC *nats.Conn
-	JS jetstream.JetStream
+	NatsConn  *nats.Conn
+	JetStream jetstream.JetStream
 )
 
 func Init() {
 	var err error
 	natsURL := getNatsURL()
-	NC, err = nats.Connect(natsURL)
+	NatsConn, err = nats.Connect(natsURL)
 	if err != nil {
 		config.Logger.Fatal(
 			"unable to connect with nats server",
 		)
 	}
 
-	JS, err = jetstream.New(NC)
+	JetStream, err = jetstream.New(NatsConn)
 	if err != nil {
 		config.Logger.Fatal(
 			"jetstream",

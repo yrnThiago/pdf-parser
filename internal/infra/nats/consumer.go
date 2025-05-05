@@ -12,36 +12,18 @@ import (
 	"github.com/yrnThiago/pdf-ocr/internal/grpc/client"
 )
 
-const pdfSubject = "pdf"
-
-var pdfFilter = fmt.Sprintf("%s.>", pdfSubject)
+const (
+	pdfSubject = "pdf"
+	pdfFilter  = pdfSubject + ".>"
+)
 
 type Consumer struct {
-	Js          jetstream.JetStream
-	Ctx         context.Context
-	Config      jetstream.ConsumerConfig
-	ConsumerCtx jetstream.Consumer
-	GrpcClient  *client.GrpcClient
-}
-
-func NewConsumer(name, durable, filterSubject string) *Consumer {
-	return &Consumer{
-		Js:  JS,
-		Ctx: context.Background(),
-		Config: jetstream.ConsumerConfig{
-			Name:          name,
-			Durable:       durable,
-			FilterSubject: filterSubject,
-			AckPolicy:     jetstream.AckExplicitPolicy,
-			DeliverPolicy: jetstream.DeliverAllPolicy,
-		},
-		GrpcClient: client.NewGrpcClient(),
-	}
+	ConsumerJS jetstream.Consumer
+	GrpcClient *client.GrpcClient
 }
 
 func ConsumerInit() {
 	ordersConsumer := NewConsumer("pdf_processor", "pdf_processor", pdfFilter)
-	ordersConsumer.CreateStream()
 	ordersConsumer.HandlingNewPdfs()
 
 	config.Logger.Info(
@@ -49,8 +31,42 @@ func ConsumerInit() {
 	)
 }
 
+func NewConsumer(name, durable, filterSubject string) *Consumer {
+	consumerConfig := NewConsumerConfig(name, durable, filterSubject)
+
+	return &Consumer{
+		ConsumerJS: NewConsumerJS(consumerConfig),
+		GrpcClient: client.NewGrpcClient(),
+	}
+}
+
+func NewConsumerConfig(name, durable, filterSubject string) jetstream.ConsumerConfig {
+	return jetstream.ConsumerConfig{
+		Name:          name,
+		Durable:       durable,
+		FilterSubject: filterSubject,
+		AckPolicy:     jetstream.AckExplicitPolicy,
+		DeliverPolicy: jetstream.DeliverAllPolicy,
+	}
+}
+
+func NewConsumerJS(configJS jetstream.ConsumerConfig) jetstream.Consumer {
+	ctx := context.Background()
+	stream, err := JetStream.Stream(ctx, pdfSubject)
+	if err != nil {
+		config.Logger.Fatal("err", zap.Error(err))
+	}
+
+	consumerJS, err := stream.CreateOrUpdateConsumer(ctx, configJS)
+	if err != nil {
+		config.Logger.Fatal("err", zap.Error(err))
+	}
+
+	return consumerJS
+}
+
 func (c *Consumer) HandlingNewPdfs() {
-	_, err := c.ConsumerCtx.Consume(func(msg jetstream.Msg) {
+	_, err := c.ConsumerJS.Consume(func(msg jetstream.Msg) {
 		pdfID := getPdfIdFromMsg(msg)
 		msg.Ack()
 
@@ -66,18 +82,6 @@ func (c *Consumer) HandlingNewPdfs() {
 
 		config.Logger.Info("pdf successfully processed", zap.String("pdf id", pdfID))
 	})
-	if err != nil {
-		config.Logger.Fatal("err", zap.Error(err))
-	}
-}
-
-func (c *Consumer) CreateStream() {
-	stream, err := c.Js.Stream(c.Ctx, pdfSubject)
-	if err != nil {
-		config.Logger.Fatal("err", zap.Error(err))
-	}
-
-	c.ConsumerCtx, err = stream.CreateOrUpdateConsumer(c.Ctx, c.Config)
 	if err != nil {
 		config.Logger.Fatal("err", zap.Error(err))
 	}
