@@ -5,16 +5,16 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/yrnThiago/pdf-ocr/internal/grpc/services/genproto"
-	"github.com/yrnThiago/pdf-ocr/internal/grpc/services/types"
+	"github.com/yrnThiago/pdf-ocr/api/pb"
+	"github.com/yrnThiago/pdf-ocr/internal/pdf"
 )
 
 type PdfHandler struct {
-	pdfService types.PdfService
+	pdfService pdf.PdfService
 	pdf_ocr.UnimplementedPdfServiceServer
 }
 
-func NewPdfService(grpc *grpc.Server, pdfService types.PdfService) {
+func NewPdfService(grpc *grpc.Server, pdfService pdf.PdfService) {
 	handler := &PdfHandler{
 		pdfService: pdfService,
 	}
@@ -26,11 +26,11 @@ func (h *PdfHandler) ExtractFromPdf(
 	ctx context.Context,
 	req *pdf_ocr.PdfRequest,
 ) (*pdf_ocr.PdfResponse, error) {
-	pdf := &pdf_ocr.Pdf{
+	newPdf := &pdf_ocr.Pdf{
 		ID: req.ID,
 	}
 
-	content, err := h.pdfService.ExtractFromPdf(ctx, pdf)
+	content, err := h.pdfService.ExtractFromPdf(ctx, newPdf)
 	if err != nil {
 		return nil, err
 	}

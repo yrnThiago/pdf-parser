@@ -1,4 +1,4 @@
-package services
+package pdf
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 	"github.com/ledongthuc/pdf"
 
 	"github.com/yrnThiago/pdf-ocr/internal/grpc/client"
-	pdf_ocr "github.com/yrnThiago/pdf-ocr/internal/grpc/services/genproto"
+	"github.com/yrnThiago/pdf-ocr/api/pb"
 	"github.com/yrnThiago/pdf-ocr/internal/utils"
 )
 

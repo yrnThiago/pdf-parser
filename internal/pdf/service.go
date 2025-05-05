@@ -1,9 +1,9 @@
-package types
+package pdf
 
 import (
 	"context"
 
-	pdf_ocr "github.com/yrnThiago/pdf-ocr/internal/grpc/services/genproto"
+	"github.com/yrnThiago/pdf-ocr/api/pb"
 )
 
 type PdfService interface {

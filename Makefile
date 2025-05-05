@@ -3,6 +3,6 @@ run-dev:
 
 gen:
 	@protoc \
-		--proto_path=internal/grpc/protobuf pdf.proto \
-		--go_out=internal/grpc/services/genproto --go_opt=paths=source_relative \
-		--go-grpc_out=internal/grpc/services/genproto --go-grpc_opt=paths=source_relative \
+		--proto_path=api pdf.proto \
+		--go_out=api/pb  --go_opt=paths=source_relative \
+		--go-grpc_out=api/pb --go-grpc_opt=paths=source_relative \

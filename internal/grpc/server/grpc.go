@@ -3,11 +3,12 @@ package server
 import (
 	"net"
 
-	"github.com/yrnThiago/pdf-ocr/config"
-	handler "github.com/yrnThiago/pdf-ocr/internal/grpc/handler/pdf"
-	"github.com/yrnThiago/pdf-ocr/internal/grpc/services"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+
+	"github.com/yrnThiago/pdf-ocr/config"
+	"github.com/yrnThiago/pdf-ocr/internal/grpc/handler"
+	"github.com/yrnThiago/pdf-ocr/internal/pdf"
 )
 
 type gRPCServer struct {
@@ -28,7 +29,7 @@ func Init() {
 
 	grpcServer := grpc.NewServer()
 
-	pdfService := services.NewPdfUseCase()
+	pdfService := pdf.NewPdfUseCase()
 	handler.NewPdfService(grpcServer, pdfService)
 
 	config.Logger.Info("grpc server listening on", zap.String("port", server.port))
