@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PdfService_AddPdf_FullMethodName = "/PdfService/AddPdf"
+	PdfService_ExtractFromPdf_FullMethodName = "/PdfService/ExtractFromPdf"
 )
 
 // PdfServiceClient is the client API for PdfService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PdfServiceClient interface {
-	AddPdf(ctx context.Context, in *AddPdfRequest, opts ...grpc.CallOption) (*AddPdfResponse, error)
+	ExtractFromPdf(ctx context.Context, in *PdfRequest, opts ...grpc.CallOption) (*PdfResponse, error)
 }
 
 type pdfServiceClient struct {
@@ -37,10 +37,10 @@ func NewPdfServiceClient(cc grpc.ClientConnInterface) PdfServiceClient {
 	return &pdfServiceClient{cc}
 }
 
-func (c *pdfServiceClient) AddPdf(ctx context.Context, in *AddPdfRequest, opts ...grpc.CallOption) (*AddPdfResponse, error) {
+func (c *pdfServiceClient) ExtractFromPdf(ctx context.Context, in *PdfRequest, opts ...grpc.CallOption) (*PdfResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddPdfResponse)
-	err := c.cc.Invoke(ctx, PdfService_AddPdf_FullMethodName, in, out, cOpts...)
+	out := new(PdfResponse)
+	err := c.cc.Invoke(ctx, PdfService_ExtractFromPdf_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *pdfServiceClient) AddPdf(ctx context.Context, in *AddPdfRequest, opts .
 // All implementations must embed UnimplementedPdfServiceServer
 // for forward compatibility.
 type PdfServiceServer interface {
-	AddPdf(context.Context, *AddPdfRequest) (*AddPdfResponse, error)
+	ExtractFromPdf(context.Context, *PdfRequest) (*PdfResponse, error)
 	mustEmbedUnimplementedPdfServiceServer()
 }
 
@@ -62,8 +62,8 @@ type PdfServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedPdfServiceServer struct{}
 
-func (UnimplementedPdfServiceServer) AddPdf(context.Context, *AddPdfRequest) (*AddPdfResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddPdf not implemented")
+func (UnimplementedPdfServiceServer) ExtractFromPdf(context.Context, *PdfRequest) (*PdfResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExtractFromPdf not implemented")
 }
 func (UnimplementedPdfServiceServer) mustEmbedUnimplementedPdfServiceServer() {}
 func (UnimplementedPdfServiceServer) testEmbeddedByValue()                    {}
@@ -86,20 +86,20 @@ func RegisterPdfServiceServer(s grpc.ServiceRegistrar, srv PdfServiceServer) {
 	s.RegisterService(&PdfService_ServiceDesc, srv)
 }
 
-func _PdfService_AddPdf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPdfRequest)
+func _PdfService_ExtractFromPdf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PdfRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PdfServiceServer).AddPdf(ctx, in)
+		return srv.(PdfServiceServer).ExtractFromPdf(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PdfService_AddPdf_FullMethodName,
+		FullMethod: PdfService_ExtractFromPdf_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PdfServiceServer).AddPdf(ctx, req.(*AddPdfRequest))
+		return srv.(PdfServiceServer).ExtractFromPdf(ctx, req.(*PdfRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -112,8 +112,8 @@ var PdfService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PdfServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddPdf",
-			Handler:    _PdfService_AddPdf_Handler,
+			MethodName: "ExtractFromPdf",
+			Handler:    _PdfService_ExtractFromPdf_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

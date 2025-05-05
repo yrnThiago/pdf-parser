@@ -1,22 +1,23 @@
 package server
 
 import (
-	"log"
-
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
-	"github.com/yrnThiago/pdf-ocr/internal/grpc/client"
+	"github.com/yrnThiago/pdf-ocr/config"
+	"github.com/yrnThiago/pdf-ocr/internal/infra/nats"
+	"github.com/yrnThiago/pdf-ocr/internal/utils"
+	"go.uber.org/zap"
 )
 
 type HttpServer struct {
-	addr string
+	port string
 }
 
-func NewHttpServer(addr string) *HttpServer {
-	return &HttpServer{addr: addr}
+func NewHttpServer(port string) *HttpServer {
+	return &HttpServer{port: port}
 }
 
-func (h *HttpServer) Run() error {
+func Init() {
+	server := NewHttpServer(config.Env.Port)
 	app := fiber.New()
 
 	app.Post("/upload", func(c *fiber.Ctx) error {
@@ -26,19 +27,19 @@ func (h *HttpServer) Run() error {
 			return c.Status(500).JSON(fiber.Map{"error": "something went wrong"})
 		}
 
-		fileID := uuid.New().String()
-		filePath := "internal/uploads/" + fileID + ".pdf"
+		fileID := utils.GenerateUuid()
+		filePath := utils.GetPdfPath(fileID)
 		c.SaveFile(file, filePath)
 
-		client := client.NewGrpcClient()
-		content, err := client.AddPdf(filePath)
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "something went wrong"})
-		}
+		go nats.PdfPublisher.Publish(fileID)
 
-		return c.Status(200).JSON(fiber.Map{"message": content})
+		return c.Status(200).JSON(fiber.Map{"message": "wait until we proceess your file"})
 	})
 
-	log.Printf("Starting server on %s", h.addr)
-	return app.Listen(h.addr)
+	config.Logger.Info("http server listening on", zap.String("port", server.port))
+
+	config.Logger.Fatal(
+		"something went wrong",
+		zap.Error(app.Listen(":"+server.port)),
+	)
 }

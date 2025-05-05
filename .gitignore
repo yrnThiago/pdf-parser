@@ -1,2 +1,3 @@
 .env
 /internal/uploads/*.pdf
+/internal/logs/*.log

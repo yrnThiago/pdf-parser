@@ -3,18 +3,29 @@ syntax = "proto3";
 option go_package = "github.com/yrnThiago/pdf-ocr";
 
 service PdfService {
-  rpc AddPdf(AddPdfRequest) returns(AddPdfResponse) {}
+  rpc ExtractFromPdf(PdfRequest) returns(PdfResponse) {}
+}
+
+message User {
+  string ID = 1;
+  string Name = 2;
+  string Address = 3;
+  string Email = 4;
+  string CellNumber = 5;
+  string Github = 6;
+  string LinkedIn = 7;
 }
 
 message Pdf {
   string ID = 1;
-  string Path = 2;
+  User User = 2;
 }
 
-message AddPdfRequest {
-  string Path = 1;
+message PdfRequest {
+  string ID = 1;
 }
 
-message AddPdfResponse {
-  string Text = 1;
+message PdfResponse {
+  User User = 1;
+  string Text = 2;
 }

@@ -29,9 +29,9 @@ func NewGrpcClient() *GrpcClient {
 	}
 }
 
-func (c *GrpcClient) AddPdf(filePath string) (string, error) {
-	pdfResponse, err := c.PdfServiceClient.AddPdf(context.Background(), &pdf_ocr.AddPdfRequest{
-		Path: filePath,
+func (c *GrpcClient) ExtractFromPdf(id string) (string, error) {
+	pdfResponse, err := c.PdfServiceClient.ExtractFromPdf(context.Background(), &pdf_ocr.PdfRequest{
+		ID: id,
 	})
 	if err != nil {
 		panic(err)

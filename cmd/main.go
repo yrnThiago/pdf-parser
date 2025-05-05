@@ -4,14 +4,17 @@ import (
 	"github.com/yrnThiago/pdf-ocr/config"
 	grpcServer "github.com/yrnThiago/pdf-ocr/internal/grpc/server"
 	httpServer "github.com/yrnThiago/pdf-ocr/internal/http/server"
+	"github.com/yrnThiago/pdf-ocr/internal/infra/nats"
 )
 
 func main() {
 	config.Init()
+	config.LoggerInit()
 
-	httpServer := httpServer.NewHttpServer(":3000")
-	go httpServer.Run()
+	nats.Init()
+	nats.PublisherInit()
+	nats.ConsumerInit()
 
-	grpcServer := grpcServer.NewGRPCServer(":50051")
-	grpcServer.Run()
+	go httpServer.Init()
+	grpcServer.Init()
 }

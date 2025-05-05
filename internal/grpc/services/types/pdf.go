@@ -7,5 +7,5 @@ import (
 )
 
 type PdfService interface {
-	AddPdf(context.Context, *pdf_ocr.Pdf) (string, error)
+	ExtractFromPdf(context.Context, *pdf_ocr.Pdf) (string, error)
 }

@@ -22,20 +22,25 @@ func NewPdfService(grpc *grpc.Server, pdfService types.PdfService) {
 	pdf_ocr.RegisterPdfServiceServer(grpc, handler)
 }
 
-func (h *PdfHandler) AddPdf(
+func (h *PdfHandler) ExtractFromPdf(
 	ctx context.Context,
-	req *pdf_ocr.AddPdfRequest,
-) (*pdf_ocr.AddPdfResponse, error) {
+	req *pdf_ocr.PdfRequest,
+) (*pdf_ocr.PdfResponse, error) {
 	pdf := &pdf_ocr.Pdf{
-		Path: req.Path,
+		ID: req.ID,
 	}
 
-	content, err := h.pdfService.AddPdf(ctx, pdf)
+	content, err := h.pdfService.ExtractFromPdf(ctx, pdf)
 	if err != nil {
 		return nil, err
 	}
 
-	res := &pdf_ocr.AddPdfResponse{
+	res := &pdf_ocr.PdfResponse{
+		User: &pdf_ocr.User{
+			ID:   "123",
+			Name: "Nome",
+			// ...
+		},
 		Text: content,
 	}
 

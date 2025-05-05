@@ -1,12 +1,12 @@
 package server
 
 import (
-	"log"
 	"net"
 
 	"github.com/yrnThiago/pdf-ocr/config"
 	handler "github.com/yrnThiago/pdf-ocr/internal/grpc/handler/pdf"
 	"github.com/yrnThiago/pdf-ocr/internal/grpc/services"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
@@ -15,12 +15,13 @@ type gRPCServer struct {
 	port string
 }
 
-func NewGRPCServer(addr string) *gRPCServer {
+func NewGRPCServer() *gRPCServer {
 	return &gRPCServer{host: config.Env.GrpcHost, port: config.Env.GrpcPort}
 }
 
-func (s *gRPCServer) Run() error {
-	listen, err := net.Listen("tcp", ":"+s.port)
+func Init() {
+	server := NewGRPCServer()
+	listen, err := net.Listen("tcp", ":"+server.port)
 	if err != nil {
 		panic(err)
 	}
@@ -30,7 +31,10 @@ func (s *gRPCServer) Run() error {
 	pdfService := services.NewPdfUseCase()
 	handler.NewPdfService(grpcServer, pdfService)
 
-	log.Printf("listening port on %s", s.port)
+	config.Logger.Info("grpc server listening on", zap.String("port", server.port))
 
-	return grpcServer.Serve(listen)
+	config.Logger.Fatal(
+		"something went wrong",
+		zap.Error(grpcServer.Serve(listen)),
+	)
 }
