@@ -13,6 +13,10 @@ var Logger *zap.Logger
 
 const logsPath = "./internal/logs/logs.log"
 
+type LogLevels struct {
+	Debug string `json:"DEBUG"`
+}
+
 func LoggerInit() {
 	encoderConfig := zapcore.EncoderConfig{
 		TimeKey:        "ts",
@@ -38,13 +42,22 @@ func LoggerInit() {
 	fileWriter := zapcore.AddSync(logFile)
 	consoleWriter := zapcore.AddSync(os.Stdout)
 
-	logLevel := zapcore.DebugLevel
+	logLevel := getLogLevel(Env.LogLevel)
 	core := zapcore.NewTee(
 		zapcore.NewCore(fileEncoder, fileWriter, logLevel),
 		zapcore.NewCore(consoleEncoder, consoleWriter, logLevel),
 	)
 
 	Logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
+}
+
+func getLogLevel(logLevel string) zapcore.Level {
+	switch logLevel {
+	case "PROD":
+		return zapcore.ErrorLevel
+	default:
+		return zapcore.DebugLevel
+	}
 }
 
 func pathExists(path string) bool {

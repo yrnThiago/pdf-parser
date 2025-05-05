@@ -11,7 +11,8 @@ type EnvVariables struct {
 	GrpcHost string
 	GrpcPort string
 
-	Port string
+	Port     string
+	LogLevel string
 
 	NatsUrl string
 }
@@ -28,6 +29,7 @@ func Init() {
 		GrpcHost: os.Getenv("GRPC_HOST"),
 		GrpcPort: os.Getenv("GRPC_PORT"),
 		Port:     os.Getenv("API_PORT"),
+		LogLevel: os.Getenv("LOG_LEVEL"),
 		NatsUrl:  os.Getenv("NATS_URL"),
 	}
 }
