@@ -33,15 +33,8 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
         page = reader.pages[0]
         content = page.extract_text()
 
-        for row in content.split("\n"):
-            words = row.split()
-            qty_words = len(words)
-            if qty_words == 1:
-                user_info[words[0]] = "_"
+        extractAndSaveUserInfoByKeys(content)
 
-            print(row, len(row.split()))
-        
-        print(user_info)
         user = pdf_pb2.User()
         pdfResponse = pdf_pb2.PdfResponse(User=user, Text=content)
         
@@ -63,6 +56,33 @@ def serve():
             time.sleep(60 * 60 * 24)
     except KeyboardInterrupt:
         server.stop(0)
+
+def extractAndSaveUserInfoByKeys(content):
+    rows = content.split("\n")
+    qty_rows = len(rows)
+
+    idx = 0
+    while idx < qty_rows-1:
+        row = rows[idx]
+        words = row.split()
+        if rowHasTitle(row):
+            key = words[0]
+            next_row = rows[idx+1]
+            while not rowHasTitle(next_row[idx+1]):
+                user_info[key] += next_row[idx+1]
+                idx += 1
+        idx += 1
+
+def rowIsEmpty(row):
+    return 
+
+def rowHasTitle(row):
+    qty_words = len(row.split())
+    if qty_words <= 2:
+        return True
+
+    return False
+
 
 def getInsecureGrpcPort():
     return f"[::]:{grpc_port}"
