@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/yrnThiago/pdf-ocr/config"
 	"github.com/yrnThiago/pdf-ocr/api/pb"
+	"github.com/yrnThiago/pdf-ocr/config"
 )
 
 type GrpcClient struct {
@@ -21,7 +22,10 @@ func NewGrpcClient() *GrpcClient {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		panic(err)
+		config.Logger.Fatal(
+			"failed to create grpc client",
+			zap.Error(err),
+		)
 	}
 
 	return &GrpcClient{
@@ -29,15 +33,18 @@ func NewGrpcClient() *GrpcClient {
 	}
 }
 
-func (c *GrpcClient) ExtractFromPdf(id string) (string, error) {
+func (c *GrpcClient) ExtractFromPdf(id string) (*pdf_ocr.PdfResponse, error) {
 	pdfResponse, err := c.PdfServiceClient.ExtractFromPdf(context.Background(), &pdf_ocr.PdfRequest{
 		ID: id,
 	})
 	if err != nil {
-		panic(err)
+		config.Logger.Fatal(
+			"something went wrong",
+			zap.Error(err),
+		)
 	}
 
-	return pdfResponse.Text, nil
+	return pdfResponse, nil
 }
 
 func getGrpcUrl() string {

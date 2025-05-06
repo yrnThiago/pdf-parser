@@ -8,7 +8,6 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
-	github.com/ledongthuc/pdf v0.0.0-20240201131950-da5b75280b06
 	github.com/nats-io/nats.go v1.42.0
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.72.0

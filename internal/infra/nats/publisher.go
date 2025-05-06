@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
 	"go.uber.org/zap"
 
@@ -13,37 +14,30 @@ import (
 var PdfPublisher *Publisher
 
 type Publisher struct {
-	Config jetstream.StreamConfig
-}
-
-func PublisherInit() {
-	PdfPublisher = NewPublisher("pdf", "Msgs for pdf", "pdf.>")
-
-	config.Logger.Info(
-		"publishers successfully initialized",
-	)
+	NatsConn *nats.Conn
+	Js       jetstream.JetStream
+	Ctx      context.Context
+	Config   jetstream.StreamConfig
 }
 
 func NewPublisher(name, description, subject string) *Publisher {
 	return &Publisher{
-		Config: NewPublisherConfig(name, description, subject),
-	}
-}
-
-func NewPublisherConfig(name, description, subject string) jetstream.StreamConfig {
-	return jetstream.StreamConfig{
-		Name:        name,
-		Description: description,
-		Subjects: []string{
-			subject,
+		NatsConn: NC,
+		Js:       JS,
+		Ctx:      context.Background(),
+		Config: jetstream.StreamConfig{
+			Name:        name,
+			Description: description,
+			Subjects: []string{
+				subject,
+			},
+			MaxBytes: 1024 * 1024 * 1024,
 		},
-		MaxBytes: 1024 * 1024 * 1024,
 	}
 }
 
 func (p *Publisher) Publish(msg string) {
-	ctx := context.Background()
-	_, err := JetStream.Publish(ctx, fmt.Sprintf("pdf.%s", msg), []byte("new pdf"))
+	_, err := p.Js.Publish(p.Ctx, fmt.Sprintf("pdf.%s", msg), []byte("new pdf"))
 	if err != nil {
 		config.Logger.Warn(
 			"msg cant be published",
@@ -54,5 +48,24 @@ func (p *Publisher) Publish(msg string) {
 	config.Logger.Info(
 		"publishing new pdf",
 		zap.String("pdf id", msg),
+	)
+}
+
+func (p *Publisher) CreateStream() {
+	_, err := p.Js.CreateOrUpdateStream(p.Ctx, p.Config)
+	if err != nil {
+		config.Logger.Fatal(
+			"publisher cant be initialized",
+			zap.Error(err),
+		)
+	}
+}
+
+func PublisherInit() {
+	PdfPublisher = NewPublisher("pdf", "Msgs for pdf", "pdf.>")
+	PdfPublisher.CreateStream()
+
+	config.Logger.Info(
+		"publishers successfully initialized",
 	)
 }
