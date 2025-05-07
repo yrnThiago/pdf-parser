@@ -12,7 +12,16 @@ from dotenv import load_dotenv
 import os
 
 # TODO: storage user info extracted from pdf
-user_info = {
+user_personal_info = {
+"Nome": "",
+ "E-mail": "",
+ "Telefone": "",
+ "Localização": "",
+ "LinkedIn": "",
+ "GitHub": "",
+}
+
+user_experience = {
     "Objetivo": "",
     "Conhecimento": "",
     "Experiência": "",
@@ -35,9 +44,17 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
 
         extractAndSaveUserInfoByKeys(content)
 
-        user = pdf_pb2.User()
+        user = pdf_pb2.User(
+            ID = request.ID,
+            Name = user_personal_info["Nome"],
+            Email = user_personal_info["E-mail"],
+            CellNumber = user_personal_info["Telefone"],
+            Address = user_personal_info["Localização"],
+            LinkedIn = user_personal_info["LinkedIn"],
+            Github = user_personal_info["GitHub"],
+        )
         pdfResponse = pdf_pb2.PdfResponse(User=user, Text=content)
-        
+
         print(f"successfully pdf id: {request.ID}")
         return pdfResponse
 
@@ -58,6 +75,8 @@ def serve():
         server.stop(0)
 
 def extractAndSaveUserInfoByKeys(content):
+    personal_info_found = False
+
     rows = content.split("\n")
     qty_rows = len(rows)
 
@@ -66,15 +85,22 @@ def extractAndSaveUserInfoByKeys(content):
         row = rows[idx]
         words = row.split()
         if rowHasTitle(row):
+            if not personal_info_found:
+                personal_info_found = True
+
+                for y in range(1, len(user_personal_info)+1):
+                    # TODO: fix more than 2 values when "key:val | key:val"
+                    key, val = rows[idx+y].split(":")
+                    user_personal_info[key] = val.strip()
+
+                idx += len(user_personal_info)+1
+
             key = words[0]
             next_row = rows[idx+1]
             while not rowHasTitle(next_row[idx+1]):
-                user_info[key] += next_row[idx+1]
+                user_experience[key] += next_row[idx+1]
                 idx += 1
         idx += 1
-
-def rowIsEmpty(row):
-    return 
 
 def rowHasTitle(row):
     qty_words = len(row.split())
