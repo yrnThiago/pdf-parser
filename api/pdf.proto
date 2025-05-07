@@ -36,5 +36,4 @@ message PdfRequest {
 
 message PdfResponse {
   User User = 1;
-  string Text = 2;
 }

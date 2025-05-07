@@ -296,7 +296,6 @@ func (x *PdfRequest) GetID() string {
 type PdfResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	User          *User                  `protobuf:"bytes,1,opt,name=User,proto3" json:"User,omitempty"`
-	Text          string                 `protobuf:"bytes,2,opt,name=Text,proto3" json:"Text,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -338,13 +337,6 @@ func (x *PdfResponse) GetUser() *User {
 	return nil
 }
 
-func (x *PdfResponse) GetText() string {
-	if x != nil {
-		return x.Text
-	}
-	return ""
-}
-
 var File_pdf_proto protoreflect.FileDescriptor
 
 const file_pdf_proto_rawDesc = "" +
@@ -374,10 +366,9 @@ const file_pdf_proto_rawDesc = "" +
 	"\x04User\x18\x02 \x01(\v2\x05.UserR\x04User\"\x1c\n" +
 	"\n" +
 	"PdfRequest\x12\x0e\n" +
-	"\x02ID\x18\x01 \x01(\tR\x02ID\"<\n" +
+	"\x02ID\x18\x01 \x01(\tR\x02ID\"(\n" +
 	"\vPdfResponse\x12\x19\n" +
-	"\x04User\x18\x01 \x01(\v2\x05.UserR\x04User\x12\x12\n" +
-	"\x04Text\x18\x02 \x01(\tR\x04Text2;\n" +
+	"\x04User\x18\x01 \x01(\v2\x05.UserR\x04User2;\n" +
 	"\n" +
 	"PdfService\x12-\n" +
 	"\x0eExtractFromPdf\x12\v.PdfRequest\x1a\f.PdfResponse\"\x00B\x1eZ\x1cgithub.com/yrnThiago/pdf-ocrb\x06proto3"

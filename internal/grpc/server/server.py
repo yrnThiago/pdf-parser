@@ -45,7 +45,7 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
             Github = user_personal_info["GITHUB"],
             Experience = experience
         )
-        pdf_response = pdf_pb2.PdfResponse(User=user, Text=content)
+        pdf_response = pdf_pb2.PdfResponse(User=user)
 
         print(f"successfully pdf id: {request.ID}")
         return pdf_response
