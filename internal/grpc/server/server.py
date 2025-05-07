@@ -11,23 +11,6 @@ from pypdf import PdfReader
 from dotenv import load_dotenv
 import os
 
-# TODO: storage user info extracted from pdf
-user_personal_info = {
-"Nome": "",
- "E-mail": "",
- "Telefone": "",
- "Localização": "",
- "LinkedIn": "",
- "GitHub": "",
-}
-
-user_experience = {
-    "Objetivo": "",
-    "Conhecimento": "",
-    "Experiência": "",
-    "Educação": "",
-}
-
 load_dotenv()
 
 grpc_port = os.getenv('GRPC_PORT', "50051")
@@ -42,16 +25,16 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
         page = reader.pages[0]
         content = page.extract_text()
 
-        extract_user_info_and_save(content)
+        user_personal_info, user_experience = extract_user_info_and_save(content)
 
         user = pdf_pb2.User(
             ID = request.ID,
-            Name = user_personal_info["Nome"],
-            Email = user_personal_info["E-mail"],
-            CellNumber = user_personal_info["Telefone"],
-            Address = user_personal_info["Localização"],
-            LinkedIn = user_personal_info["LinkedIn"],
-            Github = user_personal_info["GitHub"],
+            Name = user_personal_info["NOME"],
+            Email = user_personal_info["E-MAIL"],
+            CellNumber = user_personal_info["TELEFONE"],
+            Address = user_personal_info["ENDEREÇO"],
+            LinkedIn = user_personal_info["LINKEDIN"],
+            Github = user_personal_info["GITHUB"],
         )
         pdf_response = pdf_pb2.PdfResponse(User=user, Text=content)
 
@@ -75,32 +58,69 @@ def serve():
         server.stop(0)
 
 def extract_user_info_and_save(content):
-    personal_info_found = False
-
     rows = content.split("\n")
-    qty_rows = len(rows)
 
-    idx = 0
+    user_personal_info, idx = get_personal_info(rows) 
+    user_experience = get_user_experience_from_content(idx, rows)
+
+    return user_personal_info, user_experience
+   
+def get_user_experience_from_content(idx, rows):
+    user_experience = {}
+
+    qty_rows = len(rows)
     while idx < qty_rows-1:
         row = rows[idx]
         words = row.split()
         if row_has_title(row):
-            if not personal_info_found:
-                personal_info_found = True
-
-                for y in range(1, len(user_personal_info)+1):
-                    # TODO: fix more than 2 values when "key:val | key:val"
-                    key, val = rows[idx+y].split(":")
-                    user_personal_info[key] = val.strip()
-
-                idx += len(user_personal_info)+1
-
             key = words[0]
-            next_row = rows[idx+1]
-            while not row_has_title(next_row[idx+1]):
-                user_experience[key] += next_row[idx+1]
+            if not user_experience.get(key):
+                user_experience[key] = ""
+
+            while not row_has_title(rows[idx+1]):
+                user_experience[key] += rows[idx+1]
+
                 idx += 1
         idx += 1
+
+    return user_experience
+
+def get_formatted_key_and_value(row):
+    values = row.split(":")
+    if len(values) == 1:
+        values.append("not found")
+
+    key, val = values[0].strip().upper(), values[1].strip()
+    values = []
+
+    return key, val
+
+def get_personal_info(rows):
+    user_personal_info = {
+        "NOME": "",
+        "E-MAIL": "",
+        "TELEFONE": "",
+        "ENDEREÇO": "",
+        "LINKEDIN": "",
+        "GITHUB": "",
+    }
+
+    user_personal_info["NOME"] = rows[0]
+    user_personal_info["RESUMO"] = rows[1]
+
+    idx = 1
+    while not row_has_title(rows[idx+1]):
+        keys_same_row = rows[idx+1].split("|")
+        if len(keys_same_row) > 1:
+            for row in keys_same_row:
+                key, val = get_formatted_key_and_value(row)
+                user_personal_info[key] = val
+                
+        key, val = get_formatted_key_and_value(keys_same_row[0])
+        user_personal_info[key] = val
+        idx += 1
+
+    return user_personal_info, idx
 
 def row_has_title(row):
     qty_words = len(row.split())
