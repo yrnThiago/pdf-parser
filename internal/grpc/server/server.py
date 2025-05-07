@@ -38,11 +38,11 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
     def ExtractFromPdf(self, request, context):
         print(f"extracting text from pdf id: {request.ID}")
 
-        reader = PdfReader(getPdfPath(request.ID))
+        reader = PdfReader(get_pdf_path(request.ID))
         page = reader.pages[0]
         content = page.extract_text()
 
-        extractAndSaveUserInfoByKeys(content)
+        extract_user_info_and_save(content)
 
         user = pdf_pb2.User(
             ID = request.ID,
@@ -64,7 +64,7 @@ def serve():
     pdf_pb2_grpc.add_PdfServiceServicer_to_server(PdfServiceServicer(), server)
     
     print(f"gRPC server listening on port {grpc_port}")
-    server.add_insecure_port(getInsecureGrpcPort())
+    server.add_insecure_port(get_insecure_grpc_port())
     server.start()
     
     #TODO: I dont like these lines refactor later
@@ -74,7 +74,7 @@ def serve():
     except KeyboardInterrupt:
         server.stop(0)
 
-def extractAndSaveUserInfoByKeys(content):
+def extract_user_info_and_save(content):
     personal_info_found = False
 
     rows = content.split("\n")
@@ -84,7 +84,7 @@ def extractAndSaveUserInfoByKeys(content):
     while idx < qty_rows-1:
         row = rows[idx]
         words = row.split()
-        if rowHasTitle(row):
+        if row_has_title(row):
             if not personal_info_found:
                 personal_info_found = True
 
@@ -97,12 +97,12 @@ def extractAndSaveUserInfoByKeys(content):
 
             key = words[0]
             next_row = rows[idx+1]
-            while not rowHasTitle(next_row[idx+1]):
+            while not row_has_title(next_row[idx+1]):
                 user_experience[key] += next_row[idx+1]
                 idx += 1
         idx += 1
 
-def rowHasTitle(row):
+def row_has_title(row):
     qty_words = len(row.split())
     if qty_words <= 2:
         return True
@@ -110,10 +110,10 @@ def rowHasTitle(row):
     return False
 
 
-def getInsecureGrpcPort():
+def get_insecure_grpc_port():
     return f"[::]:{grpc_port}"
 
-def getPdfPath(id):
+def get_pdf_path(id):
     return "internal/uploads/" + id + ".pdf"
 
 if __name__ == '__main__':
