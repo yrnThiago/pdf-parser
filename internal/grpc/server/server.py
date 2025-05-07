@@ -53,10 +53,10 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
             LinkedIn = user_personal_info["LinkedIn"],
             Github = user_personal_info["GitHub"],
         )
-        pdfResponse = pdf_pb2.PdfResponse(User=user, Text=content)
+        pdf_response = pdf_pb2.PdfResponse(User=user, Text=content)
 
         print(f"successfully pdf id: {request.ID}")
-        return pdfResponse
+        return pdf_response
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
