@@ -30,6 +30,7 @@ type User struct {
 	CellNumber    string                 `protobuf:"bytes,5,opt,name=CellNumber,proto3" json:"CellNumber,omitempty"`
 	Github        string                 `protobuf:"bytes,6,opt,name=Github,proto3" json:"Github,omitempty"`
 	LinkedIn      string                 `protobuf:"bytes,7,opt,name=LinkedIn,proto3" json:"LinkedIn,omitempty"`
+	Experience    *UserExperience        `protobuf:"bytes,8,opt,name=Experience,proto3" json:"Experience,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -113,6 +114,89 @@ func (x *User) GetLinkedIn() string {
 	return ""
 }
 
+func (x *User) GetExperience() *UserExperience {
+	if x != nil {
+		return x.Experience
+	}
+	return nil
+}
+
+type UserExperience struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Resume        string                 `protobuf:"bytes,1,opt,name=Resume,proto3" json:"Resume,omitempty"`
+	Goal          string                 `protobuf:"bytes,2,opt,name=Goal,proto3" json:"Goal,omitempty"`
+	Knowledge     string                 `protobuf:"bytes,3,opt,name=Knowledge,proto3" json:"Knowledge,omitempty"`
+	Projects      string                 `protobuf:"bytes,4,opt,name=Projects,proto3" json:"Projects,omitempty"`
+	Education     string                 `protobuf:"bytes,5,opt,name=Education,proto3" json:"Education,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserExperience) Reset() {
+	*x = UserExperience{}
+	mi := &file_pdf_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserExperience) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserExperience) ProtoMessage() {}
+
+func (x *UserExperience) ProtoReflect() protoreflect.Message {
+	mi := &file_pdf_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserExperience.ProtoReflect.Descriptor instead.
+func (*UserExperience) Descriptor() ([]byte, []int) {
+	return file_pdf_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *UserExperience) GetResume() string {
+	if x != nil {
+		return x.Resume
+	}
+	return ""
+}
+
+func (x *UserExperience) GetGoal() string {
+	if x != nil {
+		return x.Goal
+	}
+	return ""
+}
+
+func (x *UserExperience) GetKnowledge() string {
+	if x != nil {
+		return x.Knowledge
+	}
+	return ""
+}
+
+func (x *UserExperience) GetProjects() string {
+	if x != nil {
+		return x.Projects
+	}
+	return ""
+}
+
+func (x *UserExperience) GetEducation() string {
+	if x != nil {
+		return x.Education
+	}
+	return ""
+}
+
 type Pdf struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ID            string                 `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
@@ -123,7 +207,7 @@ type Pdf struct {
 
 func (x *Pdf) Reset() {
 	*x = Pdf{}
-	mi := &file_pdf_proto_msgTypes[1]
+	mi := &file_pdf_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -135,7 +219,7 @@ func (x *Pdf) String() string {
 func (*Pdf) ProtoMessage() {}
 
 func (x *Pdf) ProtoReflect() protoreflect.Message {
-	mi := &file_pdf_proto_msgTypes[1]
+	mi := &file_pdf_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -148,7 +232,7 @@ func (x *Pdf) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pdf.ProtoReflect.Descriptor instead.
 func (*Pdf) Descriptor() ([]byte, []int) {
-	return file_pdf_proto_rawDescGZIP(), []int{1}
+	return file_pdf_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Pdf) GetID() string {
@@ -174,7 +258,7 @@ type PdfRequest struct {
 
 func (x *PdfRequest) Reset() {
 	*x = PdfRequest{}
-	mi := &file_pdf_proto_msgTypes[2]
+	mi := &file_pdf_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -186,7 +270,7 @@ func (x *PdfRequest) String() string {
 func (*PdfRequest) ProtoMessage() {}
 
 func (x *PdfRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pdf_proto_msgTypes[2]
+	mi := &file_pdf_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -199,7 +283,7 @@ func (x *PdfRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PdfRequest.ProtoReflect.Descriptor instead.
 func (*PdfRequest) Descriptor() ([]byte, []int) {
-	return file_pdf_proto_rawDescGZIP(), []int{2}
+	return file_pdf_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *PdfRequest) GetID() string {
@@ -219,7 +303,7 @@ type PdfResponse struct {
 
 func (x *PdfResponse) Reset() {
 	*x = PdfResponse{}
-	mi := &file_pdf_proto_msgTypes[3]
+	mi := &file_pdf_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -231,7 +315,7 @@ func (x *PdfResponse) String() string {
 func (*PdfResponse) ProtoMessage() {}
 
 func (x *PdfResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pdf_proto_msgTypes[3]
+	mi := &file_pdf_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -244,7 +328,7 @@ func (x *PdfResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PdfResponse.ProtoReflect.Descriptor instead.
 func (*PdfResponse) Descriptor() ([]byte, []int) {
-	return file_pdf_proto_rawDescGZIP(), []int{3}
+	return file_pdf_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *PdfResponse) GetUser() *User {
@@ -265,7 +349,7 @@ var File_pdf_proto protoreflect.FileDescriptor
 
 const file_pdf_proto_rawDesc = "" +
 	"\n" +
-	"\tpdf.proto\"\xae\x01\n" +
+	"\tpdf.proto\"\xdf\x01\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x12\n" +
 	"\x04Name\x18\x02 \x01(\tR\x04Name\x12\x18\n" +
@@ -275,7 +359,16 @@ const file_pdf_proto_rawDesc = "" +
 	"CellNumber\x18\x05 \x01(\tR\n" +
 	"CellNumber\x12\x16\n" +
 	"\x06Github\x18\x06 \x01(\tR\x06Github\x12\x1a\n" +
-	"\bLinkedIn\x18\a \x01(\tR\bLinkedIn\"0\n" +
+	"\bLinkedIn\x18\a \x01(\tR\bLinkedIn\x12/\n" +
+	"\n" +
+	"Experience\x18\b \x01(\v2\x0f.UserExperienceR\n" +
+	"Experience\"\x94\x01\n" +
+	"\x0eUserExperience\x12\x16\n" +
+	"\x06Resume\x18\x01 \x01(\tR\x06Resume\x12\x12\n" +
+	"\x04Goal\x18\x02 \x01(\tR\x04Goal\x12\x1c\n" +
+	"\tKnowledge\x18\x03 \x01(\tR\tKnowledge\x12\x1a\n" +
+	"\bProjects\x18\x04 \x01(\tR\bProjects\x12\x1c\n" +
+	"\tEducation\x18\x05 \x01(\tR\tEducation\"0\n" +
 	"\x03Pdf\x12\x0e\n" +
 	"\x02ID\x18\x01 \x01(\tR\x02ID\x12\x19\n" +
 	"\x04User\x18\x02 \x01(\v2\x05.UserR\x04User\"\x1c\n" +
@@ -301,23 +394,25 @@ func file_pdf_proto_rawDescGZIP() []byte {
 	return file_pdf_proto_rawDescData
 }
 
-var file_pdf_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_pdf_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_pdf_proto_goTypes = []any{
-	(*User)(nil),        // 0: User
-	(*Pdf)(nil),         // 1: Pdf
-	(*PdfRequest)(nil),  // 2: PdfRequest
-	(*PdfResponse)(nil), // 3: PdfResponse
+	(*User)(nil),           // 0: User
+	(*UserExperience)(nil), // 1: UserExperience
+	(*Pdf)(nil),            // 2: Pdf
+	(*PdfRequest)(nil),     // 3: PdfRequest
+	(*PdfResponse)(nil),    // 4: PdfResponse
 }
 var file_pdf_proto_depIdxs = []int32{
-	0, // 0: Pdf.User:type_name -> User
-	0, // 1: PdfResponse.User:type_name -> User
-	2, // 2: PdfService.ExtractFromPdf:input_type -> PdfRequest
-	3, // 3: PdfService.ExtractFromPdf:output_type -> PdfResponse
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	1, // 0: User.Experience:type_name -> UserExperience
+	0, // 1: Pdf.User:type_name -> User
+	0, // 2: PdfResponse.User:type_name -> User
+	3, // 3: PdfService.ExtractFromPdf:input_type -> PdfRequest
+	4, // 4: PdfService.ExtractFromPdf:output_type -> PdfResponse
+	4, // [4:5] is the sub-list for method output_type
+	3, // [3:4] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_pdf_proto_init() }
@@ -331,7 +426,7 @@ func file_pdf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pdf_proto_rawDesc), len(file_pdf_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

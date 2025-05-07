@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tpdf.proto\"v\n\x04User\x12\n\n\x02ID\x18\x01 \x01(\t\x12\x0c\n\x04Name\x18\x02 \x01(\t\x12\x0f\n\x07\x41\x64\x64ress\x18\x03 \x01(\t\x12\r\n\x05\x45mail\x18\x04 \x01(\t\x12\x12\n\nCellNumber\x18\x05 \x01(\t\x12\x0e\n\x06Github\x18\x06 \x01(\t\x12\x10\n\x08LinkedIn\x18\x07 \x01(\t\"&\n\x03Pdf\x12\n\n\x02ID\x18\x01 \x01(\t\x12\x13\n\x04User\x18\x02 \x01(\x0b\x32\x05.User\"\x18\n\nPdfRequest\x12\n\n\x02ID\x18\x01 \x01(\t\"0\n\x0bPdfResponse\x12\x13\n\x04User\x18\x01 \x01(\x0b\x32\x05.User\x12\x0c\n\x04Text\x18\x02 \x01(\t2;\n\nPdfService\x12-\n\x0e\x45xtractFromPdf\x12\x0b.PdfRequest\x1a\x0c.PdfResponse\"\x00\x42\x1eZ\x1cgithub.com/yrnThiago/pdf-ocrb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tpdf.proto\"\x9b\x01\n\x04User\x12\n\n\x02ID\x18\x01 \x01(\t\x12\x0c\n\x04Name\x18\x02 \x01(\t\x12\x0f\n\x07\x41\x64\x64ress\x18\x03 \x01(\t\x12\r\n\x05\x45mail\x18\x04 \x01(\t\x12\x12\n\nCellNumber\x18\x05 \x01(\t\x12\x0e\n\x06Github\x18\x06 \x01(\t\x12\x10\n\x08LinkedIn\x18\x07 \x01(\t\x12#\n\nExperience\x18\x08 \x01(\x0b\x32\x0f.UserExperience\"f\n\x0eUserExperience\x12\x0e\n\x06Resume\x18\x01 \x01(\t\x12\x0c\n\x04Goal\x18\x02 \x01(\t\x12\x11\n\tKnowledge\x18\x03 \x01(\t\x12\x10\n\x08Projects\x18\x04 \x01(\t\x12\x11\n\tEducation\x18\x05 \x01(\t\"&\n\x03Pdf\x12\n\n\x02ID\x18\x01 \x01(\t\x12\x13\n\x04User\x18\x02 \x01(\x0b\x32\x05.User\"\x18\n\nPdfRequest\x12\n\n\x02ID\x18\x01 \x01(\t\"0\n\x0bPdfResponse\x12\x13\n\x04User\x18\x01 \x01(\x0b\x32\x05.User\x12\x0c\n\x04Text\x18\x02 \x01(\t2;\n\nPdfService\x12-\n\x0e\x45xtractFromPdf\x12\x0b.PdfRequest\x1a\x0c.PdfResponse\"\x00\x42\x1eZ\x1cgithub.com/yrnThiago/pdf-ocrb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,14 +32,16 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'pdf_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z\034github.com/yrnThiago/pdf-ocr'
-  _globals['_USER']._serialized_start=13
-  _globals['_USER']._serialized_end=131
-  _globals['_PDF']._serialized_start=133
-  _globals['_PDF']._serialized_end=171
-  _globals['_PDFREQUEST']._serialized_start=173
-  _globals['_PDFREQUEST']._serialized_end=197
-  _globals['_PDFRESPONSE']._serialized_start=199
-  _globals['_PDFRESPONSE']._serialized_end=247
-  _globals['_PDFSERVICE']._serialized_start=249
-  _globals['_PDFSERVICE']._serialized_end=308
+  _globals['_USER']._serialized_start=14
+  _globals['_USER']._serialized_end=169
+  _globals['_USEREXPERIENCE']._serialized_start=171
+  _globals['_USEREXPERIENCE']._serialized_end=273
+  _globals['_PDF']._serialized_start=275
+  _globals['_PDF']._serialized_end=313
+  _globals['_PDFREQUEST']._serialized_start=315
+  _globals['_PDFREQUEST']._serialized_end=339
+  _globals['_PDFRESPONSE']._serialized_start=341
+  _globals['_PDFRESPONSE']._serialized_end=389
+  _globals['_PDFSERVICE']._serialized_start=391
+  _globals['_PDFSERVICE']._serialized_end=450
 # @@protoc_insertion_point(module_scope)

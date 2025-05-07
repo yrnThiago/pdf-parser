@@ -27,6 +27,14 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
 
         user_personal_info, user_experience = extract_user_info_and_save(content)
 
+        experience = pdf_pb2.UserExperience(
+            Resume = user_personal_info["RESUMO"],
+            Goal = user_experience["OBJETIVO"],
+            Knowledge = user_experience["CONHECIMENTO"],
+            Projects = user_experience["EXPERIÊNCIA"],
+            Education = user_experience["EDUCAÇÃO"],
+        )
+
         user = pdf_pb2.User(
             ID = request.ID,
             Name = user_personal_info["NOME"],
@@ -35,6 +43,7 @@ class PdfServiceServicer(pdf_pb2_grpc.PdfServiceServicer):
             Address = user_personal_info["ENDEREÇO"],
             LinkedIn = user_personal_info["LINKEDIN"],
             Github = user_personal_info["GITHUB"],
+            Experience = experience
         )
         pdf_response = pdf_pb2.PdfResponse(User=user, Text=content)
 
@@ -73,7 +82,7 @@ def get_user_experience_from_content(idx, rows):
         row = rows[idx]
         words = row.split()
         if row_has_title(row):
-            key = words[0]
+            key = words[0].upper()
             if not user_experience.get(key):
                 user_experience[key] = ""
 
